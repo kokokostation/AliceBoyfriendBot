@@ -4,8 +4,7 @@ from functools import partial
 
 import pandas as pd
 import tensorflow as tf
-from tensorflow.contrib.framework import list_variables
-from tensorflow.contrib.tensorboard.plugins import projector
+from tensorboard.plugins import projector
 
 from batch_generator.prior import CNTR_LOC
 from train_utils.utils import write_json, read_dill, write_dill
@@ -57,7 +56,7 @@ class ModelContainer:
         ckpt = self.ckpt_step(step)
 
         if tf.compat.v1.train.checkpoint_exists(ckpt):
-            names = set([a for a, _ in list_variables(ckpt)])
+            names = set([a for a, _ in tf.train.list_variables(ckpt)])
             vars = [v for v in tf.compat.v1.global_variables() if v.op.name in names]
             saver = tf.compat.v1.train.Saver(vars)
             saver.restore(sess, ckpt)
