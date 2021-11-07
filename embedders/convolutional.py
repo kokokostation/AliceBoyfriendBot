@@ -1,8 +1,9 @@
-import tensorflow as tf
 from functools import wraps
 
-from model.utils import apply_mask
+import tensorflow as tf
+
 from embedders.flavor_embedder import flavor_embedder
+from model.utils import apply_mask
 
 
 def convolutional_embedder(encode):
@@ -12,7 +13,7 @@ def convolutional_embedder(encode):
         embeddings = apply_mask(embeddings, sent_lens)
         rep = encode(embeddings, mp)
         rep = apply_mask(rep, sent_lens)
-        rep = tf.reduce_max(rep, axis=1)
+        rep = tf.reduce_max(input_tensor=rep, axis=1)
 
         return rep
 

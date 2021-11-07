@@ -1,16 +1,16 @@
-from cityhash import CityHash64
+import json
+import os
 import re
 from collections import Counter
-import pandas as pd
-import os
-import json
 from copy import deepcopy
 
-from batch_generator.dir import DirIterator
-from train_utils.parallel_launcher import parallel_launcher
-from dataset.reddit import is_unique
-from train_utils.utils import get_files
+import pandas as pd
+from cityhash import CityHash64
 
+from batch_generator.dir import DirIterator
+from dataset.reddit import is_unique
+from train_utils.parallel_launcher import parallel_launcher
+from train_utils.utils import get_files
 
 CNTR_LOC = 'cntr.pickle'
 REPLIES_DIR = 'replies'

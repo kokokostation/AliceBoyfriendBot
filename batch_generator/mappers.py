@@ -1,9 +1,10 @@
 from functools import partial, wraps
+
 import numpy as np
 import tensorflow as tf
 
-from batch_generator.prior import PriorGetter
 from batch_generator.dir import DirIterator
+from batch_generator.prior import PriorGetter
 from batch_generator.utils import cycle
 
 
@@ -70,12 +71,12 @@ def train_mapper(item, mm=message_mapper):
 def rank_preparation_mapper(item, mm=message_mapper):
     return message_mapper(item), mm(item)
 
- 
+
 @agnostic_mapper
 def uid_train_mapper(item, mm=message_mapper, ranking=False):
     res = mm(item)
     uid = uid_mapper(item)
-   
+
     return res if ranking else None, [uid] + res
 
 

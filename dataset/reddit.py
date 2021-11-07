@@ -1,6 +1,6 @@
-import re
-import os
 import json
+import os
+import re
 
 
 def prepare_reddit(from_tsv, to_dir, context_len):

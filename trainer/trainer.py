@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
-from IPython.display import clear_output
 import numpy as np
 import tensorflow as tf
+from IPython.display import clear_output
 
 from train_utils.queue import MultiprocessQueue
 from train_utils.utils import make_feed_dict
@@ -13,9 +13,9 @@ class Trainer:
                  train_step,
                  metric,
                  train_gen,
-                 val_gen, 
-                 sess, 
-                 placeholders, 
+                 val_gen,
+                 sess,
+                 placeholders,
                  report_step=2000,
                  val_steps=100,
                  alpha=0.99,
@@ -34,7 +34,7 @@ class Trainer:
         self.placeholders = placeholders
         self.queue_jobs = queue_jobs
         self.queue_maxsize = queue_maxsize
-        
+
         self.cur_step = 0
         self.train_loss_history = []
         self.val_loss_history = []
@@ -44,7 +44,7 @@ class Trainer:
         self.train_metric = None
         self.val_loss = None
         self.val_metric = None
-        
+
     def plot_results(self):
         steps = np.arange(0, self.cur_step + 1, self.report_step)
         clear_output(wait=True)
@@ -60,24 +60,24 @@ class Trainer:
         plt.plot(steps, self.val_metric_history, label="validation")
         plt.legend(loc='lower right')
         plt.show()
-        
+
     def smooth_update(self, acc_val, new_val):
         if acc_val is None:
             return new_val
         return self.alpha * acc_val + (1 - self.alpha) * new_val
-    
+
     def make_feed_dict(self, batch):
         return make_feed_dict(self.placeholders, batch)
 
     def make_step(self, batch, train=True):
         if train:
-            l, m, _ = self.sess.run([self.loss, self.metric, self.train_step], 
+            l, m, _ = self.sess.run([self.loss, self.metric, self.train_step],
                                     self.make_feed_dict(batch))
             self.train_loss = self.smooth_update(self.train_loss, l)
             self.train_metric = self.smooth_update(self.train_metric, m)
-            
+
         else:
-            l, m = self.sess.run([self.loss, self.metric], 
+            l, m = self.sess.run([self.loss, self.metric],
                                  self.make_feed_dict(batch))
             self.val_loss = self.smooth_update(self.val_loss, l)
             self.val_metric = self.smooth_update(self.val_metric, m)
@@ -93,7 +93,7 @@ class Trainer:
             self.val_metric_history.append(self.val_metric)
             self.val_loss = None
             self.val_metric = None
-    
+
     def start(self, include_validation=True):
         queue = MultiprocessQueue.from_gen_maker(self.train_gen,
                                                  self.queue_jobs,
@@ -122,5 +122,5 @@ class Trainer:
             queue.stop()
 
     def save(self, weights_path):
-        saver = tf.train.Saver()
+        saver = tf.compat.v1.train.Saver()
         saver.save(self.sess, weights_path)

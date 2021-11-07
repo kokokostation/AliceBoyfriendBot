@@ -1,5 +1,6 @@
-import numpy as np
 from collections import deque
+
+import numpy as np
 
 from application.utils import k_best
 
@@ -65,7 +66,3 @@ class RestrictingStorage(ScoresVectorStorage):
         best_inds = k_best(self.rc.history_len + 1, scores)
 
         return self.rc.get_next_entry(best_inds)
-
-
-
-

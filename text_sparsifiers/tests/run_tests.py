@@ -1,7 +1,7 @@
 import pytest
 
-from text_sparsifiers.tokenizers import words, character_ngram, word_ngram
 from text_sparsifiers.sparsifiers import Sparsifier
+from text_sparsifiers.tokenizers import words, character_ngram, word_ngram
 
 
 def test_words():

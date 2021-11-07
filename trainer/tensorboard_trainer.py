@@ -1,4 +1,5 @@
 from itertools import count
+
 import tensorflow as tf
 
 from train_utils.queue import MultiprocessQueue
@@ -25,11 +26,11 @@ class TensorBoardTrainer:
             self.step = 0
 
         for name, tensor in [self.loss] + self.metrics:
-            tf.summary.scalar(name, tensor)
-        self.merged = tf.summary.merge_all()
+            tf.compat.v1.summary.scalar(name, tensor)
+        self.merged = tf.compat.v1.summary.merge_all()
 
-        self.train_writer = tf.summary.FileWriter(self.model_container.dirs['train'])
-        self.val_writer = tf.summary.FileWriter(self.model_container.dirs['val'])
+        self.train_writer = tf.compat.v1.summary.FileWriter(self.model_container.dirs['train'])
+        self.val_writer = tf.compat.v1.summary.FileWriter(self.model_container.dirs['val'])
 
         self.train_gen = train_gen
         self.val_gen = val_gen

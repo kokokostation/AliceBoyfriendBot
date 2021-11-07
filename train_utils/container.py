@@ -1,13 +1,14 @@
-import tensorflow as tf
-from functools import partial
-import pandas as pd
 import os
-from tensorflow.contrib.framework import list_variables
 import shutil
+from functools import partial
+
+import pandas as pd
+import tensorflow as tf
+from tensorflow.contrib.framework import list_variables
 from tensorflow.contrib.tensorboard.plugins import projector
 
-from train_utils.utils import write_json, read_dill, write_dill
 from batch_generator.prior import CNTR_LOC
+from train_utils.utils import write_json, read_dill, write_dill
 
 
 class ModelContainer:
@@ -49,22 +50,22 @@ class ModelContainer:
         return '{}_{}'.format(self.ckpt, step)
 
     def read_model(self, step=-1):
-        sess = tf.InteractiveSession()
+        sess = tf.compat.v1.InteractiveSession()
 
-        sess.run(tf.global_variables_initializer())
+        sess.run(tf.compat.v1.global_variables_initializer())
 
         ckpt = self.ckpt_step(step)
 
-        if tf.train.checkpoint_exists(ckpt):
+        if tf.compat.v1.train.checkpoint_exists(ckpt):
             names = set([a for a, _ in list_variables(ckpt)])
-            vars = [v for v in tf.global_variables() if v.op.name in names]
-            saver = tf.train.Saver(vars)
+            vars = [v for v in tf.compat.v1.global_variables() if v.op.name in names]
+            saver = tf.compat.v1.train.Saver(vars)
             saver.restore(sess, ckpt)
 
         return sess
 
     def save_model(self, sess, step=-1):
-        saver = tf.train.Saver()
+        saver = tf.compat.v1.train.Saver()
         saver.save(sess, self.ckpt_step(step))
 
     def dir_prefix(self, suffix):
@@ -104,10 +105,10 @@ class ModelContainer:
             embedding_var = tf.Variable(embeddings,
                                         name='word_embeddings')
 
-            sess = tf.Session()
-            sess.run(tf.global_variables_initializer())
+            sess = tf.compat.v1.Session()
+            sess.run(tf.compat.v1.global_variables_initializer())
 
-            saver = tf.train.Saver()
+            saver = tf.compat.v1.train.Saver()
             saver.save(sess, os.path.join(testing_dir, 'embeddings'))
 
             config = projector.ProjectorConfig()
@@ -116,7 +117,7 @@ class ModelContainer:
             embedding.tensor_name = embedding_var.name
             embedding.metadata_path = meta_path
 
-            summary_writer = tf.summary.FileWriter(testing_dir)
+            summary_writer = tf.compat.v1.summary.FileWriter(testing_dir)
 
             projector.visualize_embeddings(summary_writer, config)
 

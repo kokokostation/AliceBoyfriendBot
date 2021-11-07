@@ -1,7 +1,7 @@
-from nltk.tokenize import TweetTokenizer
-from itertools import chain
 from functools import partial
+from itertools import chain
 
+from nltk.tokenize import TweetTokenizer
 
 words = TweetTokenizer().tokenize
 

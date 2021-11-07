@@ -1,7 +1,8 @@
-import numpy as np
-import tensorflow as tf
 import os
 from itertools import chain
+
+import numpy as np
+import tensorflow as tf
 
 
 def plain_batch_generator(gen, batch_size, callback=None):
@@ -31,7 +32,7 @@ def sparse_tuple_from(sequences, dtype=np.int32):
     values = np.asarray(values, dtype=dtype)
     shape = np.asarray([len(sequences), indices.max(0)[1] + 1], dtype=np.int32)
 
-    return tf.SparseTensorValue(indices=indices, values=values, dense_shape=shape)
+    return tf.compat.v1.SparseTensorValue(indices=indices, values=values, dense_shape=shape)
 
 
 def cycle(iterator):

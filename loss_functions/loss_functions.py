@@ -10,17 +10,17 @@ def sample_pos_neg_similarities(similarities, batch_size, sampling, skew=1, lam=
     elif sampling == "weighted":
         lam = lam or 100.
         q = tf.subtract(1.0, similarities)  # distances / 2
-        sample_weights = tf.minimum(lam, tf.reciprocal(q))
+        sample_weights = tf.minimum(lam, tf.math.reciprocal(q))
         neg_examples_probs = tf.multiply(sample_weights, neg_ones)
     else:
         raise NotImplementedError("sampling {} not implemented".format(sampling))
 
     neg_examples_ids = tf.reshape(
-        tf.multinomial(tf.log(neg_examples_probs) * skew, 1),
+        tf.random.categorical(logits=tf.math.log(neg_examples_probs) * skew, num_samples=1),
         [-1],
     )
     neg_examples = tf.reduce_sum(
-        tf.multiply(
+        input_tensor=tf.multiply(
             similarities,
             tf.one_hot(
                 neg_examples_ids,
@@ -30,7 +30,7 @@ def sample_pos_neg_similarities(similarities, batch_size, sampling, skew=1, lam=
         axis=1
     )
     pos_examples = tf.reduce_sum(
-        tf.multiply(
+        input_tensor=tf.multiply(
             similarities,
             tf.eye(batch_size)
         ),
@@ -45,17 +45,17 @@ def easy_negative_pce(batch_questions, batch_answers, mode='sigmoid', sampling="
 
     pos_similarities, neg_similarities = sample_pos_neg_similarities(similarities, batch_size, sampling, 1, lam)
     diff = tf.subtract(pos_similarities, neg_similarities)
-    
+
     if mode == 'sigmoid':
-        with tf.variable_scope(
+        with tf.compat.v1.variable_scope(
                 "easy_negative_pce_sigmoid",
-                reuse=tf.AUTO_REUSE,
-                initializer=tf.random_normal(shape=()),
+                reuse=tf.compat.v1.AUTO_REUSE,
+                initializer=tf.random.normal(shape=()),
         ):
-            alpha = tf.get_variable('alpha', dtype=tf.float32)
-            beta = tf.get_variable('beta', dtype=tf.float32)
+            alpha = tf.compat.v1.get_variable('alpha', dtype=tf.float32)
+            beta = tf.compat.v1.get_variable('beta', dtype=tf.float32)
         return -tf.reduce_sum(
-            tf.log_sigmoid(
+            input_tensor=tf.math.log_sigmoid(
                 tf.add(
                     beta,
                     tf.scalar_mul(alpha, diff)
@@ -63,18 +63,18 @@ def easy_negative_pce(batch_questions, batch_answers, mode='sigmoid', sampling="
             )
         )
     if mode == 'margin':
-        with tf.variable_scope(
+        with tf.compat.v1.variable_scope(
                 "easy_negative_pce_adamargin",
-                reuse=tf.AUTO_REUSE,
-                initializer=tf.random_normal(shape=()),
+                reuse=tf.compat.v1.AUTO_REUSE,
+                initializer=tf.random.normal(shape=()),
         ):
             # alpha = tf.get_variable('alpha', dtype=tf.float32)
             alpha = lmd
-            beta = tf.get_variable('beta', dtype=tf.float32)
+            beta = tf.compat.v1.get_variable('beta', dtype=tf.float32)
 
         return tf.add_n([
             tf.reduce_sum(
-                tf.nn.relu(
+                input_tensor=tf.nn.relu(
                     tf.add(
                         alpha,
                         sign * tf.subtract(
@@ -90,11 +90,11 @@ def easy_negative_pce(batch_questions, batch_answers, mode='sigmoid', sampling="
         ])
 
     elif mode == 'triplet':
-        return tf.reduce_sum(tf.nn.relu(lmd - diff))
+        return tf.reduce_sum(input_tensor=tf.nn.relu(lmd - diff))
 
 
 def full_pairwise_softmax(batch_questions, batch_answers):
-    with tf.variable_scope('fps'):
+    with tf.compat.v1.variable_scope('fps'):
         similarities = pairwise_similarities(batch_questions, batch_answers)
 
         alpha = tf.Variable(0.1, dtype=tf.float32, name='alpha')
@@ -102,10 +102,10 @@ def full_pairwise_softmax(batch_questions, batch_answers):
 
         return tf.add_n([
             tf.reduce_sum(
-                tf.nn.sparse_softmax_cross_entropy_with_logits(
-                    labels=tf.range(tf.shape(batch_questions)[0]),
+                input_tensor=tf.nn.sparse_softmax_cross_entropy_with_logits(
+                    labels=tf.range(tf.shape(input=batch_questions)[0]),
                     logits=logits
                 )
             )
-            for logits in [similarities, tf.transpose(similarities)]
+            for logits in [similarities, tf.transpose(a=similarities)]
         ])

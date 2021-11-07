@@ -1,6 +1,7 @@
-import numpy as np
-from itertools import chain
 from functools import partial
+from itertools import chain
+
+import numpy as np
 
 from batch_generator.interfaces.flavor import MapperFlavor
 from batch_generator.mappers import train_mapper, plain_reply_mapper, test_mapper, \
@@ -36,7 +37,7 @@ class Recurrent(MapperFlavor):
             if batch_optimization:
                 block = get_batch(gen, batch_size * self.block_factor)
                 block = sorted(block, key=lambda x:
-                    np.mean([len(el) for el in flatten_to_str(x[1])]))
+                np.mean([len(el) for el in flatten_to_str(x[1])]))
                 slices = [slice(i, i + batch_size) for i in range(0, len(block), batch_size)]
                 np.random.shuffle(slices)
 
@@ -132,7 +133,6 @@ def make_ranking_flavor(flavor_cls):
 
 RankingFused = make_ranking_flavor(RecurrentFused)
 RankingPlain = make_ranking_flavor(Plain)
-
 
 PLAIN_TRAIN = Plain(train_mapper(None))
 PLAIN_REPLY = Plain(plain_reply_mapper(None))

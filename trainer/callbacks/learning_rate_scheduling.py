@@ -18,6 +18,7 @@ class LearnigRateSchedule(Callback):
     For additional info see:
         https://www.jeremyjordan.me/nn-learning-rate/
     '''
+
     def __init__(self, learning_rate, min_lr=0.0001, max_lr=0.001, step_size=4, decay=0.99, mode='triangular'):
         self.learning_rate = learning_rate
         self.min_lr = min_lr
@@ -34,7 +35,7 @@ class LearnigRateSchedule(Callback):
             return 'triangular'
 
     def __get_cycle(self, iteration):
-        return np.floor((1+iteration) / (2 * self.step_size))
+        return np.floor((1 + iteration) / (2 * self.step_size))
 
     def __get_x(self, iteration):
         cycle = self.__get_cycle(iteration)
@@ -44,7 +45,8 @@ class LearnigRateSchedule(Callback):
         return self.min_lr + 0.5 * ((self.max_lr - self.min_lr) * self.__get_x(iteration)) * self.decay ** iteration
 
     def cosine_lr(self, iteration):
-        return self.min_lr + 0.5 * ((self.max_lr - self.min_lr) * (1 + np.cos(iteration / self.step_size * np.pi))) * self.decay ** iteration
+        return self.min_lr + 0.5 * ((self.max_lr - self.min_lr) * (
+                    1 + np.cos(iteration / self.step_size * np.pi))) * self.decay ** iteration
 
     def on_epoch_end(self, trainer):
         iteration = trainer.step

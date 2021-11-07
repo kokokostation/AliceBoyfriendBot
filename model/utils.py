@@ -18,7 +18,7 @@ def dense_towers(model_params, context_emb, reply_emb):
 
 
 def apply_mask(rep, sent_lens):
-    maxlen = tf.shape(rep)[1]
+    maxlen = tf.shape(input=rep)[1]
     emb_size = rep.shape[-1]
 
     mask = tf.cast(tf.sequence_mask(sent_lens, maxlen), tf.float32)

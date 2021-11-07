@@ -1,11 +1,12 @@
-import os
 import json
-import numpy as np
+import os
 from shutil import rmtree
 
+import numpy as np
+
+from dataset.utils import PackMaker
 from train_utils.parallel_launcher import parallel_launcher
 from train_utils.utils import get_files
-from dataset.utils import PackMaker
 
 
 def shuffle_batch(files, step, index):

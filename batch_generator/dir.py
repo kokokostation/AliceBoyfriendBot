@@ -1,6 +1,7 @@
 import json
-import numpy as np
 from copy import copy
+
+import numpy as np
 
 from batch_generator.utils import get_random_paths
 from train_utils.utils import read_json
@@ -30,7 +31,7 @@ class DirIterator:
 
     def helper(self):
         fnames = copy(self.fnames)
-        
+
         if self.shuffle:
             np.random.shuffle(fnames)
 

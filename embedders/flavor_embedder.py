@@ -1,5 +1,6 @@
-import tensorflow as tf
 from functools import wraps
+
+import tensorflow as tf
 
 from embedders.utils import get_device
 
@@ -7,7 +8,7 @@ from embedders.utils import get_device
 def flavor_embedder(embedder):
     @wraps(embedder)
     def wrapped(data, name, mp, *args, **kwargs):
-        with tf.variable_scope(name):
+        with tf.compat.v1.variable_scope(name):
             flavor = mp['flavor']
             shape, sent_lens = data[-2:]
 
@@ -29,10 +30,10 @@ def flavor_embedder(embedder):
 
 
 def word_embedder(word_ids, mp):
-    embedding_matrix = tf.get_variable("word_embeddings", [mp['word_vocabulary_size'],
-                                                           mp['word_embedding_size']])
+    embedding_matrix = tf.compat.v1.get_variable("word_embeddings", [mp['word_vocabulary_size'],
+                                                                     mp['word_embedding_size']])
 
-    word_embeddings = tf.nn.embedding_lookup(embedding_matrix, word_ids)
+    word_embeddings = tf.nn.embedding_lookup(params=embedding_matrix, ids=word_ids)
 
     word_embeddings = add_dropout(word_embeddings, mp, 'word')
 
@@ -40,10 +41,11 @@ def word_embedder(word_ids, mp):
 
 
 def ngram_embedder(ngram_ids, shape, mp):
-    embedding_matrix = tf.get_variable("ngram_embeddings", [mp['ngram_vocabulary_size'],
-                                                            mp['ngram_embedding_size']])
+    embedding_matrix = tf.compat.v1.get_variable("ngram_embeddings", [mp['ngram_vocabulary_size'],
+                                                                      mp['ngram_embedding_size']])
 
-    embeddings = tf.nn.embedding_lookup_sparse(embedding_matrix, ngram_ids, None, combiner='mean')
+    embeddings = tf.nn.embedding_lookup_sparse(params=embedding_matrix, sp_ids=ngram_ids, sp_weights=None,
+                                               combiner='mean')
 
     shape = tf.concat([shape, (mp['ngram_embedding_size'],)], axis=0)
     embeddings = tf.reshape(embeddings, shape)
@@ -57,8 +59,8 @@ def add_dropout(embeddings, mp, prefix):
     keep_prob = mp.get('{}_keep_prob'.format(prefix))
 
     if keep_prob is not None and mp['train']:
-        noise_shape = tf.concat([tf.shape(embeddings)[:-1], (1,)], axis=0)
+        noise_shape = tf.concat([tf.shape(input=embeddings)[:-1], (1,)], axis=0)
 
-        embeddings = tf.nn.dropout(embeddings, keep_prob, noise_shape)
+        embeddings = tf.nn.dropout(embeddings, noise_shape, rate=1 - (keep_prob))
 
     return embeddings

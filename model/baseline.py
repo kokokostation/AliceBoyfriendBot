@@ -1,8 +1,8 @@
 import tensorflow as tf
 
 from embedders.bag_of_words import bag_of_words
-from model.interfaces.model import EmbedderModel, UniModel, TowersModel
 from embedders.utils import get_device
+from model.interfaces.model import EmbedderModel, UniModel, TowersModel
 
 
 class BaseBaseline(EmbedderModel, UniModel):

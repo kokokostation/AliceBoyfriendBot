@@ -1,14 +1,14 @@
+import json
 from collections import Iterable
 
-from application.model import ApplicationModel
 from application.context_preparer import ContextPreparer
-from dataset.reddit import convert
+from application.model import ApplicationModel
 from application.numpy_storage import NumpyStorage
-from batch_generator.dir import DirIterator
-from batch_generator.batch_generator import BatchGenerator
 from application.utils import make_replies
+from batch_generator.batch_generator import BatchGenerator
+from batch_generator.dir import DirIterator
+from dataset.reddit import convert
 from train_utils.container import ModelContainer
-import json
 
 
 class BaseApplier:
@@ -94,5 +94,3 @@ def make_applier(model_container, model, flavor, vector_storage=None, context_pr
         ap.to_pickle(model_container)
 
     return ap
-
-

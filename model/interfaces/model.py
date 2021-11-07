@@ -1,9 +1,10 @@
 import tensorflow as tf
+import tensorflow_addons as tfa
 
-from train_utils.utils import make_feed_dict
-from model.utils import dense_towers
 from batch_generator.flavors import Recurrent
 from encoders.tower import tower
+from model.utils import dense_towers
+from train_utils.utils import make_feed_dict
 
 
 class BaseModel:
@@ -102,10 +103,10 @@ class TowersModel(EmbedderModel, SiameseModelBoxIntruder):
 
 def make_placeholders(flavor):
     return Recurrent.make_flavor(
-        tf.placeholder(tf.int32, [None, None]),
-        tf.sparse_placeholder(tf.int32, [None, None]),
+        tf.compat.v1.placeholder(tf.int32, [None, None]),
+        tf.compat.v1.sparse_placeholder(tf.int32, [None, None]),
         flavor) + \
-           [tf.placeholder(tf.int32, [2]), tf.placeholder(tf.int32, [None])]
+           [tf.compat.v1.placeholder(tf.int32, [2]), tf.compat.v1.placeholder(tf.int32, [None])]
 
 
 class FusedModel(BaseModel):
@@ -119,7 +120,7 @@ class FusedModel(BaseModel):
 
 class UniModel(BaseModel):
     def make_placeholders_helper(self):
-        return [tf.sparse_placeholder(tf.int32, [None, None])
+        return [tf.compat.v1.sparse_placeholder(tf.int32, [None, None])
                 for _ in range(self.model_params['context_len'] + 1)]
 
 
@@ -141,7 +142,7 @@ class RankingModel(RankingModelBoxIntruder):
         context, reply = batch[:-1], batch[-1]
 
         context_outputs = self.make_context(context, context_params)
-        context_outputs = [tf.contrib.seq2seq.tile_batch(output, multiplier=multiplier)
+        context_outputs = [tfa.seq2seq.tile_batch(output, multiplier=multiplier)
                            for output in context_outputs]
 
         output = self.make_reply(context_outputs, self.model_params, reply)

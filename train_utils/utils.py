@@ -1,8 +1,9 @@
 import json
-import dill
-from itertools import chain
 import os
 from functools import partial
+from itertools import chain
+
+import dill
 
 
 def write_json(obj, path):

@@ -10,7 +10,6 @@ from telegram_bot import TelegramBot
 import logging
 import argparse
 
-
 parser = argparse.ArgumentParser(description='Run telegram bot for alice boyfriend.')
 parser.add_argument(
     '--token',

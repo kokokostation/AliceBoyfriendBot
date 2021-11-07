@@ -1,7 +1,8 @@
 from collections import Counter, defaultdict
-from sklearn.base import TransformerMixin, BaseEstimator
 from itertools import chain
+
 import numpy as np
+from sklearn.base import TransformerMixin, BaseEstimator
 
 from batch_generator.mappers import message_mapper
 from text_sparsifiers.utils import iter_map

@@ -1,10 +1,11 @@
+from itertools import chain
+
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
-from itertools import chain
 
-from batch_generator.dir import DirIterator
 from batch_generator.batch_generator import BatchGenerator
+from batch_generator.dir import DirIterator
 
 
 class Tester:

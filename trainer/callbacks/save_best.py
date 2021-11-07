@@ -1,6 +1,6 @@
 import numpy as np
-from trainer.callbacks.utils import get_last_val_loss
 
+from trainer.callbacks.utils import get_last_val_loss
 from trainer.interfaces.callback import Callback
 
 

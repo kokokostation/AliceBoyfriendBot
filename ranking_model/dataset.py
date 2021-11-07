@@ -1,26 +1,27 @@
-import pandas as pd
 import os
 from functools import partial
 from shutil import move
-import numpy as np
 
-from dataset.processing_utils import filter_and_compress
-from batch_generator.prior import get_hash_set, make_hash_of_entry, CNTR_LOC
-from batch_generator.dir import DirIterator
-from batch_generator.batch_generator import BatchGenerator
-from application.model import ApplicationModel
-from dataset.utils import PackMaker
-from train_utils.parallel_launcher import parallel_launcher_once
+import numpy as np
+import pandas as pd
+
 from application.faiss_storage import FaissStorage
-from train_utils.utils import write_json
-from batch_generator.utils import plain_batch_generator, transpose
-from model.lstm_embedder import LSTMModel
+from application.model import ApplicationModel
+from application.utils import make_replies
+from batch_generator.batch_generator import BatchGenerator
+from batch_generator.dir import DirIterator
 from batch_generator.flavors import RECURRENT_FUSED_REPLY_FOR_RANKING, \
     RECURRENT_FUSED_RANKING_PREPARATION
-from train_utils.container import ModelContainer
-from application.utils import make_replies
+from batch_generator.prior import get_hash_set, make_hash_of_entry, CNTR_LOC
 from batch_generator.prior import make_priors, REPLIES_DIR, CNTR_LOC
+from batch_generator.utils import plain_batch_generator, transpose
+from dataset.processing_utils import filter_and_compress
+from dataset.utils import PackMaker
+from model.lstm_embedder import LSTMModel
+from train_utils.container import ModelContainer
+from train_utils.parallel_launcher import parallel_launcher_once
 from train_utils.utils import get_files
+from train_utils.utils import write_json
 
 
 def hash_filter(hash_set, entry):

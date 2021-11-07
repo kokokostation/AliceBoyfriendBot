@@ -1,5 +1,5 @@
-from trainer.interfaces.callback import Callback
 from trainer.callbacks.utils import get_last_val_summary
+from trainer.interfaces.callback import Callback
 
 
 class ReducePercentage(Callback):

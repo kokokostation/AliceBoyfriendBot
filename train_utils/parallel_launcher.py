@@ -1,5 +1,5 @@
-from multiprocessing_on_dill import Pool
 import numpy as np
+from multiprocessing_on_dill import Pool
 
 from train_utils.utils import get_files
 

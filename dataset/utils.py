@@ -1,9 +1,10 @@
-import os
-import pandas as pd
-from itertools import chain
-import numpy as np
-import re
 import json
+import os
+import re
+from itertools import chain
+
+import numpy as np
+import pandas as pd
 
 from train_utils.utils import write_json
 

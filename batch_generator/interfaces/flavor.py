@@ -1,5 +1,6 @@
-from batch_generator.utils import transpose
 from itertools import tee
+
+from batch_generator.utils import transpose
 
 
 class Flavor:

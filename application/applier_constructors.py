@@ -1,20 +1,21 @@
 from functools import partial
+
 import tensorflow as tf
 
 from application.applier import RankingApplier, Applier
-from model.lstm_embedder import LSTMModel
-from model.baseline import Baseline
-from application.ranking_model import RankingApplicationModel
-from application.model import ApplicationModel
-from train_utils.container import ModelContainer
-from batch_generator.flavors import RECURRENT_FUSED_PRIOR_REPLY
-from ranking_model.baseline import RankingBaseline
-from batch_generator.flavors import RANKING_PLAIN_TRAIN, RANKING_FUSED_TRAIN, PLAIN_PRIOR_REPLY
 from application.context_preparer import FusedContextPreparer, ContextPreparer
-from dataset.reddit import convert
-from application.prior_storage import PriorStorage, RestrictingPriorStorage
 from application.interfaces.vector_storage import ReplyContainer, RestrictingContainer
+from application.model import ApplicationModel
+from application.prior_storage import PriorStorage, RestrictingPriorStorage
+from application.ranking_model import RankingApplicationModel
 from application.utils import k_best
+from batch_generator.flavors import RANKING_PLAIN_TRAIN, RANKING_FUSED_TRAIN, PLAIN_PRIOR_REPLY
+from batch_generator.flavors import RECURRENT_FUSED_PRIOR_REPLY
+from dataset.reddit import convert
+from model.baseline import Baseline
+from model.lstm_embedder import LSTMModel
+from ranking_model.baseline import RankingBaseline
+from train_utils.container import ModelContainer
 
 
 def make_baseline(config_dir='/data/reddit/models/x_prod/',

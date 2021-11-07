@@ -1,5 +1,5 @@
-from faiss import IndexFlatIP, StandardGpuResources, index_cpu_to_gpu
 import numpy as np
+from faiss import IndexFlatIP, StandardGpuResources, index_cpu_to_gpu
 
 from application.interfaces.vector_storage import VectorStorage
 
