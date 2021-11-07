@@ -7,11 +7,11 @@ statsmodels
 tqdm
 nltk
 scikit-learn
-tensorflow==1.8.0
+tensorflow
 fasttext
 dill
 cityhash
 multiprocessing_on_dill
 scipy
 tensorboard
-tensorflow-gpu==1.8.0
+tensorflow-gpu
