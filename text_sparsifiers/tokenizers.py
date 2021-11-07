@@ -31,4 +31,5 @@ def make_filling_character_ngram(n=3, fill='#'):
                                  partial(character_ngram, n=n)])
 
 
-filling_words = sequential_tokenizer([lambda text: ['#' if not text else text], words])
+def make_filling_words(fill='#'):
+    return sequential_tokenizer([lambda text: [fill if not text else text], words])

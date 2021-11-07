@@ -18,8 +18,10 @@ def agnostic_mapper(mapper):
 def message_mapper(item):
     return [a['processed_body'] for a in item]
 
+
 def uid_mapper(item):
     return item[-1]['author']
+
 
 def common_reply_mapper(get_prior, reply_extractor, item, orig_key='body'):
     orig_message, message = [reply_extractor(item)[key] for key in [orig_key, 'processed_body']]

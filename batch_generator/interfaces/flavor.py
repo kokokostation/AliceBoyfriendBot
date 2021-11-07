@@ -22,7 +22,6 @@ class Flavor:
         return result
 
 
-
 class MapperFlavor(Flavor):
     def __init__(self, mapper):
         self.mapper = mapper
