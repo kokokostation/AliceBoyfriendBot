@@ -15,3 +15,4 @@ multiprocessing_on_dill
 scipy
 tensorboard
 tensorflow-gpu
+tensorflow-addons
