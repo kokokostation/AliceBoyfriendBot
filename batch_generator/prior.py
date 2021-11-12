@@ -21,7 +21,7 @@ def make_hash_of_entry(entry):
 
 
 def make_hash(body):
-    body = re.sub('[^a-z]', '', body.lower())
+    body = re.sub('[^а-я]', '', body.lower())
 
     if body == '':
         return None

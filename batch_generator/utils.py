@@ -42,7 +42,10 @@ def cycle(iterator):
 
 
 def get_batch(gen, batch_size):
-    return [item for item, _ in zip(gen, range(batch_size))]
+    try:
+        return [next(gen) for _ in range(batch_size)]
+    except StopIteration:
+        return None
 
 
 def get_paths(folder):

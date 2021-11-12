@@ -30,8 +30,11 @@ def flavor_embedder(embedder):
 
 
 def word_embedder(word_ids, mp):
-    embedding_matrix = tf.compat.v1.get_variable("word_embeddings", [mp['word_vocabulary_size'],
-                                                                     mp['word_embedding_size']])
+    embedding_matrix = tf.compat.v1.get_variable(
+        "word_embeddings",
+        [mp['word_vocabulary_size'], mp['word_embedding_size']],
+        trainable=mp.get('word_embeddings_trainable', True),
+    )
 
     word_embeddings = tf.nn.embedding_lookup(params=embedding_matrix, ids=word_ids)
 
@@ -41,8 +44,11 @@ def word_embedder(word_ids, mp):
 
 
 def ngram_embedder(ngram_ids, shape, mp):
-    embedding_matrix = tf.compat.v1.get_variable("ngram_embeddings", [mp['ngram_vocabulary_size'],
-                                                                      mp['ngram_embedding_size']])
+    embedding_matrix = tf.compat.v1.get_variable(
+        "ngram_embeddings",
+        [mp['ngram_vocabulary_size'], mp['ngram_embedding_size']],
+        trainable=mp.get('ngram_embeddings_trainable', True),
+    )
 
     embeddings = tf.nn.embedding_lookup_sparse(params=embedding_matrix, sp_ids=ngram_ids, sp_weights=None,
                                                combiner='mean')

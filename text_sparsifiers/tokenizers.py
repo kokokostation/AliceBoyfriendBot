@@ -27,8 +27,7 @@ def sequential_tokenizer(tokenizers):
 
 
 def make_filling_character_ngram(n=3, fill='#'):
-    return sequential_tokenizer([partial(filling, n=n, fill=fill),
-                                 partial(character_ngram, n=n)])
+    return sequential_tokenizer([words, partial(filling, n=n, fill=fill), partial(character_ngram, n=n)])
 
 
 def make_filling_words(fill='#'):

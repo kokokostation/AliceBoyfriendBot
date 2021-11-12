@@ -15,7 +15,12 @@ from batch_generator.utils import get_batch, sparse_tuple_from, align, align_lis
 class Plain(MapperFlavor):
     def batch_generator_helper(self, gen, batch_size):
         while True:
-            yield get_batch(gen, batch_size)
+            batch = get_batch(gen, batch_size)
+            if batch is None:
+                break
+
+            yield batch
+
 
     def tensor(self, data, sparsifier, typ):
         return sparse_tuple_from(sparsifier.transform(data))
@@ -44,7 +49,11 @@ class Recurrent(MapperFlavor):
                 for sl in slices:
                     yield block[sl]
             else:
-                yield get_batch(gen, batch_size)
+                batch = get_batch(gen, batch_size)
+                if batch is None:
+                    break
+
+                yield batch
 
     @staticmethod
     def make_flavor(words, ngrams, flavor):
